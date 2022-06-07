@@ -1,6 +1,6 @@
 <template>
   <form class="add-form">
-    <div class="form-control">
+    <div>
       <label for="select">
         <select class="select" id="select" @change="$emit('onSelect', $event.target.value)">
           <option :key="option.label" v-for="option in options" v-bind:value="option?.value">

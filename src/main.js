@@ -1,5 +1,9 @@
 import { createApp } from 'vue';
+import Paginate from 'vuejs-paginate-next';
+
 import App from './App.vue';
 import store from './store';
 
-createApp(App).use(store).mount('#app');
+// Make BootstrapVue available throughout your project
+
+createApp(App).use(Paginate).use(store).mount('#app');

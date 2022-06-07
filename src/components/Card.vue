@@ -21,13 +21,13 @@
         </div>
       </div>
     </div>
-    <div v-if="isSelected && userDetails.length > 0" class="table">
-      <div class="row table-header">
+    <div v-if="isSelected && userDetails.length > 0" class="card-table">
+      <div class="card-row card-table-header">
         <h4>Repo Name</h4>
         <h4>Language</h4>
       </div>
       <div :key="userDetail.id" v-for="userDetail in userDetails">
-        <div class="row table-body">
+        <div class="card-row card-table-body">
           <p>{{ userDetail?.name }}</p>
           <p>{{ userDetail?.language }}</p>
         </div>
@@ -75,24 +75,28 @@ export default {
   display: flex;
   align-items: flex-end;
 }
-.row {
+.card-row {
   display: flex;
   justify-content: space-between;
 }
-.table {
+.card-table {
   width: 70%;
   margin: 20px auto;
 }
-.table-header {
+.card-table-header {
   border: 1px solid #eee;
   padding: 0px 10px;
   background: #157abc;
   color: #fff;
 }
-.table-body {
+.card-table-body {
   border: 1px solid #eee;
   padding: 0px 10px;
   background: #2b546f;
   color: #fff;
 }
+.card-row p, .card-row h4 {
+  margin-top: 10px;
+}
+
 </style>

@@ -1,6 +1,6 @@
 <template>
   <form class="add-form">
-    <div class="form-control">
+    <div>
       <label for="search">
         <input
           :type="type"

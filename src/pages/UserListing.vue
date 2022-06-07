@@ -2,21 +2,30 @@
   <div>
     <Header @onSearch="search" @onSelect="sortSelect" />
     <div class="container">
-      <div :key="post.id" v-for="post in posts?.items" class="card-wrapper">
+      <div :key="post.id" v-for="post in getUserPosts?.items" class="card-wrapper">
         <Card
           :post="post"
           @handleDetails="handleDetails"
           :isSelected="post.login === selectedCard"
           @handleCollapse="handleCollapse"
-          :userDetails="userDetails"
+          :userDetails="getUserDetails"
         />
       </div>
+    </div>
+    <div v-if="getUserPosts" class="pagination-container">
+      <PaginationComponent
+        :page="getPaginationDetails.page"
+        :perPage="getPaginationDetails.perPage"
+        :row="posts?.total_count"
+        @onPaginate="onPaginate"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import { mapGetters, mapActions } from 'vuex';
+import PaginationComponent from '../components/shared/PaginationComponent.vue';
 import Header from '../components/Header.vue';
 import Card from '../components/Card.vue';
 
@@ -25,48 +34,33 @@ export default {
   components: {
     Header,
     Card,
+    PaginationComponent,
   },
   data() {
     return {
       selectedCard: '',
-      posts: {},
-      searchValue: '',
-      userDetails: [],
     };
   },
+
+  computed: mapGetters(['getUserPosts', 'getUserDetails', 'getPaginationDetails']),
+
   methods: {
-    async getData(userName) {
-      try {
-        const response = await axios.get(`https://api.github.com/search/users?q=${userName}`);
-        this.posts = response.data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-
-    async getUserDetails(userName) {
-      try {
-        const response = await axios.get(`https://api.github.com/users/${userName}/repos`);
-        this.userDetails = response.data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-
+    ...mapActions(['setSearch', 'setPagniation', 'fetchUserDetails']),
     search(value) {
-      this.searchValue = value;
-      this.getData(value);
+      this.setSearch(value);
     },
     sortSelect(value) {
       console.log(value);
     },
     handleDetails(userName) {
-      this.userDetails = [];
-      this.getUserDetails(userName);
+      this.fetchUserDetails(userName);
       this.selectedCard = userName;
     },
     handleCollapse() {
       this.selectedCard = '';
+    },
+    onPaginate(page) {
+      this.setPagniation(page);
     },
   },
 };
@@ -74,6 +68,13 @@ export default {
 
 <style scoped>
 .card-wrapper {
+  margin-top: 20px;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
   margin-top: 20px;
 }
 </style>
